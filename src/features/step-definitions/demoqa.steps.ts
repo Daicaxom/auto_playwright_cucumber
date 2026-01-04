@@ -1,6 +1,9 @@
 import { Given, When, Then, DataTable, setDefaultTimeout } from '@cucumber/cucumber';
-import { TimeoutError, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { errors } from '@playwright/test';
 import { PlaywrightWorld } from '../../core/world/playwright-world';
+
+const TimeoutError = errors.TimeoutError;
 
 const DEMOQA_TIMEOUT = Number(process.env.CUCUMBER_TIMEOUT || 60000);
 const DEMOQA_BANNER_SELECTOR = '#close-fixedban';
@@ -21,31 +24,40 @@ Given('I am on the DemoQA home page', async function (this: PlaywrightWorld) {
   await dismissFixedBanner(this);
 });
 
-When('I navigate to the DemoQA card {string}', async function (this: PlaywrightWorld, cardTitle: string) {
-  if (!this.page) throw new Error('Page not initialized');
-  const card = this.getLocator(`div.card:has-text("${cardTitle}")`).first();
-  await card.scrollIntoViewIfNeeded();
-  await card.click();
-  await this.page.waitForLoadState('domcontentloaded');
-  await dismissFixedBanner(this);
-});
+When(
+  'I navigate to the DemoQA card {string}',
+  async function (this: PlaywrightWorld, cardTitle: string) {
+    if (!this.page) throw new Error('Page not initialized');
+    const card = this.getLocator(`div.card:has-text("${cardTitle}")`).first();
+    await card.scrollIntoViewIfNeeded();
+    await card.click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await dismissFixedBanner(this);
+  }
+);
 
-When('I open the DemoQA menu item {string}', async function (this: PlaywrightWorld, menuItem: string) {
-  if (!this.page) throw new Error('Page not initialized');
-  const item = this.getLocator('.menu-list li').filter({ hasText: menuItem });
-  await item.first().scrollIntoViewIfNeeded();
-  await item.first().click();
-  await this.page.waitForLoadState('domcontentloaded');
-});
+When(
+  'I open the DemoQA menu item {string}',
+  async function (this: PlaywrightWorld, menuItem: string) {
+    if (!this.page) throw new Error('Page not initialized');
+    const item = this.getLocator('.menu-list li').filter({ hasText: menuItem });
+    await item.first().scrollIntoViewIfNeeded();
+    await item.first().click();
+    await this.page.waitForLoadState('domcontentloaded');
+  }
+);
 
-When('I fill the DemoQA text box form with:', async function (this: PlaywrightWorld, data: DataTable) {
-  if (!this.page) throw new Error('Page not initialized');
-  const [row] = data.hashes();
-  await this.getLocator('#userName').fill(row['Full Name']);
-  await this.getLocator('#userEmail').fill(row['Email']);
-  await this.getLocator('#currentAddress').fill(row['Current Address']);
-  await this.getLocator('#permanentAddress').fill(row['Permanent Address']);
-});
+When(
+  'I fill the DemoQA text box form with:',
+  async function (this: PlaywrightWorld, data: DataTable) {
+    if (!this.page) throw new Error('Page not initialized');
+    const [row] = data.hashes();
+    await this.getLocator('#userName').fill(row['Full Name']);
+    await this.getLocator('#userEmail').fill(row['Email']);
+    await this.getLocator('#currentAddress').fill(row['Current Address']);
+    await this.getLocator('#permanentAddress').fill(row['Permanent Address']);
+  }
+);
 
 When('I submit the DemoQA form', async function (this: PlaywrightWorld) {
   if (!this.page) throw new Error('Page not initialized');
@@ -53,13 +65,16 @@ When('I submit the DemoQA form', async function (this: PlaywrightWorld) {
   await this.page.waitForSelector('#output');
 });
 
-Then('I should see the DemoQA text box output with:', async function (this: PlaywrightWorld, data: DataTable) {
-  if (!this.page) throw new Error('Page not initialized');
-  const [row] = data.hashes();
-  const output = this.getLocator('#output');
-  await expect(output).toBeVisible();
-  await verifyTextBoxOutput(this, row);
-});
+Then(
+  'I should see the DemoQA text box output with:',
+  async function (this: PlaywrightWorld, data: DataTable) {
+    if (!this.page) throw new Error('Page not initialized');
+    const [row] = data.hashes();
+    const output = this.getLocator('#output');
+    await expect(output).toBeVisible();
+    await verifyTextBoxOutput(this, row);
+  }
+);
 
 When('I add a DemoQA web table record:', async function (this: PlaywrightWorld, data: DataTable) {
   if (!this.page) throw new Error('Page not initialized');
@@ -74,27 +89,33 @@ When('I add a DemoQA web table record:', async function (this: PlaywrightWorld, 
   await this.getLocator('#submit').click();
 });
 
-Then('I should see the DemoQA web table row for {string}', async function (this: PlaywrightWorld, email: string) {
-  if (!this.page) throw new Error('Page not initialized');
-  const row = this.getLocator('.rt-tr-group').filter({ hasText: email });
-  await expect(row).toHaveCount(1);
-});
+Then(
+  'I should see the DemoQA web table row for {string}',
+  async function (this: PlaywrightWorld, email: string) {
+    if (!this.page) throw new Error('Page not initialized');
+    const row = this.getLocator('.rt-tr-group').filter({ hasText: email });
+    await expect(row).toHaveCount(1);
+  }
+);
 
-When('I delete the DemoQA web table row for {string}', async function (this: PlaywrightWorld, email: string) {
-  if (!this.page) throw new Error('Page not initialized');
-  const row = this.getLocator('.rt-tr-group').filter({ hasText: email }).first();
-  const deleteButton = row.locator('[title="Delete"]');
-  await deleteButton.click();
-});
+When(
+  'I delete the DemoQA web table row for {string}',
+  async function (this: PlaywrightWorld, email: string) {
+    if (!this.page) throw new Error('Page not initialized');
+    const row = this.getLocator('.rt-tr-group').filter({ hasText: email }).first();
+    const deleteButton = row.locator('[title="Delete"]');
+    await deleteButton.click();
+  }
+);
 
-Then('I should not see the DemoQA web table row for {string}', async function (
-  this: PlaywrightWorld,
-  email: string
-) {
-  if (!this.page) throw new Error('Page not initialized');
-  const row = this.getLocator('.rt-tr-group').filter({ hasText: email });
-  await expect(row).toHaveCount(0);
-});
+Then(
+  'I should not see the DemoQA web table row for {string}',
+  async function (this: PlaywrightWorld, email: string) {
+    if (!this.page) throw new Error('Page not initialized');
+    const row = this.getLocator('.rt-tr-group').filter({ hasText: email });
+    await expect(row).toHaveCount(0);
+  }
+);
 
 async function dismissFixedBanner(world: PlaywrightWorld): Promise<void> {
   if (!world.page) return;
@@ -114,7 +135,10 @@ async function dismissFixedBanner(world: PlaywrightWorld): Promise<void> {
   }
 }
 
-async function verifyTextBoxOutput(world: PlaywrightWorld, row: Record<string, string>): Promise<void> {
+async function verifyTextBoxOutput(
+  world: PlaywrightWorld,
+  row: Record<string, string>
+): Promise<void> {
   const expectedName = row['Name'] ?? row['Full Name'];
   const expectedEmail = row['Email'];
   const expectedCurrentAddress = row['Current Address'];
