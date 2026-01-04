@@ -255,9 +255,10 @@ describe('SauceDemo Steps', () => {
     };
 
     const findMaxPriceIndex = (prices: number[]): number => {
-      let maxPrice = 0;
+      if (prices.length === 0) return -1;
+      let maxPrice = prices[0];
       let maxIndex = 0;
-      for (let i = 0; i < prices.length; i++) {
+      for (let i = 1; i < prices.length; i++) {
         if (prices[i] > maxPrice) {
           maxPrice = prices[i];
           maxIndex = i;

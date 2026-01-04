@@ -1,9 +1,8 @@
 import { Given, When, Then, DataTable, setDefaultTimeout } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
-import { errors } from '@playwright/test';
+import { expect, errors } from '@playwright/test';
 import { PlaywrightWorld } from '../../core/world/playwright-world';
 
-const TimeoutError = errors.TimeoutError;
+const { TimeoutError } = errors;
 
 const DEMOQA_TIMEOUT = Number(process.env.CUCUMBER_TIMEOUT || 60000);
 const DEMOQA_BANNER_SELECTOR = '#close-fixedban';
