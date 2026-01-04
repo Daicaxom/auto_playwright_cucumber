@@ -68,5 +68,5 @@ export default defineConfig({
   ],
   
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
-  outputDir: 'results/playwright-test-results/',
+  outputDir: 'results/playwright-test-results',
 });

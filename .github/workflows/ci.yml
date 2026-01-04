@@ -55,7 +55,7 @@ jobs:
 
       - name: Run Playwright native tests (optional)
         if: always()
-        run: npx playwright test --reporter=html || echo "No Playwright tests found or tests failed"
+        run: npx playwright test || echo "No Playwright tests found or tests failed"
         continue-on-error: true
 
       - name: Upload Cucumber HTML report

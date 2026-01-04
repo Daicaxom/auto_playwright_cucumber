@@ -29,8 +29,9 @@ test.describe('Playwright Native Test Example', () => {
     // Navigate to a page
     await page.goto('https://www.saucedemo.com');
     
-    // Take a screenshot that will be attached to the report
-    await page.screenshot({ path: 'results/demo-screenshot.png', fullPage: true });
+    // Take a screenshot that will be automatically attached to the report
+    // Playwright automatically captures screenshots on failure, this is just for demonstration
+    await page.screenshot({ fullPage: true });
     
     // Verify page elements
     await expect(page.locator('[data-test="login-button"]')).toBeVisible();
