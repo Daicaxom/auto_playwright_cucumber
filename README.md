@@ -484,6 +484,34 @@ Configure reporting behavior in `configs/global/defaults.json`:
 }
 ```
 
+#### Allure Reporter Configuration
+
+The Allure reporter supports custom link patterns through environment variables:
+
+```bash
+# Set GitHub repository for issue links (default: Daicaxom/auto_playwright_cucumber)
+export GITHUB_REPOSITORY="your-org/your-repo"
+
+# Set TMS (Test Management System) URL for @tms links
+export TMS_URL="https://your-tms.com/issue/%s"
+
+# Run tests
+npm run cucumber
+```
+
+You can also add custom tags to your features for better Allure integration:
+
+```gherkin
+@feature:user-authentication
+@severity:critical
+@story:login
+@issue=123
+@tms=TEST-456
+Scenario: User login with valid credentials
+  Given I am on the login page
+  ...
+```
+
 ### Test Results
 
 ## 🔧 Configuration

@@ -1,5 +1,7 @@
 import { Before, After, BeforeAll, AfterAll, Status } from '@cucumber/cucumber';
 import { PlaywrightWorld } from '../../core/world/playwright-world';
+import { mkdir } from 'fs/promises';
+import { resolve } from 'path';
 
 /**
  * Setup hook - runs before each scenario
@@ -44,9 +46,6 @@ After(async function (this: PlaywrightWorld, { result, pickle }) {
  */
 BeforeAll(async function () {
   // Ensure results directories exist
-  const fs = await import('fs/promises');
-  const path = await import('path');
-
   const directories = [
     'results',
     'results/traces',
@@ -56,9 +55,9 @@ BeforeAll(async function () {
   ];
 
   for (const dir of directories) {
-    const dirPath = path.resolve(process.cwd(), dir);
+    const dirPath = resolve(process.cwd(), dir);
     try {
-      await fs.mkdir(dirPath, { recursive: true });
+      await mkdir(dirPath, { recursive: true });
     } catch (error) {
       console.error(`Failed to create directory ${dir}:`, error);
     }
