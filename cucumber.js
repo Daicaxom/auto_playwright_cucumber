@@ -6,10 +6,8 @@ module.exports = {
       'progress',
       'html:results/cucumber-report.html',
       'json:results/cucumber-report.json',
-      'allure-cucumberjs/reporter:results/allure-results',
-      '@cucumber/pretty-formatter',
+      './src/features/support/allure-reporter.js',
     ],
     formatOptions: { snippetInterface: 'async-await' },
-    publishQuiet: true,
   },
 };
