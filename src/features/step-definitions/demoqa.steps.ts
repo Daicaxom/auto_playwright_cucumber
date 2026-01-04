@@ -1,8 +1,18 @@
 import { Given, When, Then, DataTable, setDefaultTimeout } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
+import { TimeoutError, expect } from '@playwright/test';
 import { PlaywrightWorld } from '../../core/world/playwright-world';
 
-setDefaultTimeout(60000);
+const DEMOQA_TIMEOUT = Number(process.env.CUCUMBER_TIMEOUT || 60000);
+const DEMOQA_BANNER_SELECTOR = '#close-fixedban';
+const DEMOQA_BANNER_TIMEOUT = Number(process.env.DEMOQA_BANNER_TIMEOUT || 2000);
+const TEXTBOX_OUTPUT_SELECTORS = {
+  name: '#name',
+  email: '#email',
+  currentAddress: '#currentAddress',
+  permanentAddress: '#permanentAddress',
+};
+
+setDefaultTimeout(DEMOQA_TIMEOUT);
 
 Given('I am on the DemoQA home page', async function (this: PlaywrightWorld) {
   if (!this.page) throw new Error('Page not initialized');
@@ -35,7 +45,6 @@ When('I fill the DemoQA text box form with:', async function (this: PlaywrightWo
   await this.getLocator('#userEmail').fill(row['Email']);
   await this.getLocator('#currentAddress').fill(row['Current Address']);
   await this.getLocator('#permanentAddress').fill(row['Permanent Address']);
-  this.sharedData['textBoxForm'] = row;
 });
 
 When('I submit the DemoQA form', async function (this: PlaywrightWorld) {
@@ -49,10 +58,7 @@ Then('I should see the DemoQA text box output with:', async function (this: Play
   const [row] = data.hashes();
   const output = this.getLocator('#output');
   await expect(output).toBeVisible();
-  await expect(this.getLocator('#name')).toContainText(row['Name']);
-  await expect(this.getLocator('#email')).toContainText(row['Email']);
-  await expect(this.getLocator('#currentAddress')).toContainText(row['Current Address']);
-  await expect(this.getLocator('#permanentAddress')).toContainText(row['Permanent Address']);
+  await verifyTextBoxOutput(this, row);
 });
 
 When('I add a DemoQA web table record:', async function (this: PlaywrightWorld, data: DataTable) {
@@ -65,7 +71,6 @@ When('I add a DemoQA web table record:', async function (this: PlaywrightWorld, 
   await this.getLocator('#age').fill(row['Age']);
   await this.getLocator('#salary').fill(row['Salary']);
   await this.getLocator('#department').fill(row['Department']);
-  this.sharedData['lastWebTableEmail'] = row['Email'];
   await this.getLocator('#submit').click();
 });
 
@@ -93,8 +98,34 @@ Then('I should not see the DemoQA web table row for {string}', async function (
 
 async function dismissFixedBanner(world: PlaywrightWorld): Promise<void> {
   if (!world.page) return;
-  const close = world.page.locator('#close-fixedban');
-  if (await close.isVisible({ timeout: 2000 }).catch(() => false)) {
-    await close.click();
+  const closeButton = world.page.locator(DEMOQA_BANNER_SELECTOR).first();
+  try {
+    if (await closeButton.isVisible({ timeout: DEMOQA_BANNER_TIMEOUT })) {
+      await closeButton.click();
+    }
+  } catch (error) {
+    if (error instanceof TimeoutError) {
+      return;
+    }
+    if (error instanceof Error && error.message.includes('detached')) {
+      return;
+    }
+    throw error;
   }
+}
+
+async function verifyTextBoxOutput(world: PlaywrightWorld, row: Record<string, string>): Promise<void> {
+  const expectedName = row['Name'] ?? row['Full Name'];
+  const expectedEmail = row['Email'];
+  const expectedCurrentAddress = row['Current Address'];
+  const expectedPermanentAddress = row['Permanent Address'];
+
+  await expect(world.getLocator(TEXTBOX_OUTPUT_SELECTORS.name)).toContainText(expectedName || '');
+  await expect(world.getLocator(TEXTBOX_OUTPUT_SELECTORS.email)).toContainText(expectedEmail || '');
+  await expect(world.getLocator(TEXTBOX_OUTPUT_SELECTORS.currentAddress)).toContainText(
+    expectedCurrentAddress || ''
+  );
+  await expect(world.getLocator(TEXTBOX_OUTPUT_SELECTORS.permanentAddress)).toContainText(
+    expectedPermanentAddress || ''
+  );
 }
