@@ -140,7 +140,7 @@ export class GlobalProperties {
     const result = { ...target };
 
     for (const [key, value] of Object.entries(source)) {
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
+      if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
         result[key] = this.deepMerge(
           (result[key] as Record<string, unknown>) || {},
           value as Record<string, unknown>

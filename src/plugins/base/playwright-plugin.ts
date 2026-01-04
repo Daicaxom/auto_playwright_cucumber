@@ -44,7 +44,8 @@ export abstract class PlaywrightPlugin {
 
   /**
    * Setup page-level event listeners
-   * Override in concrete plugins to add custom behavior
+   * ABSTRACT METHOD: Override in concrete plugins to add custom behavior
+   * @param _page - The Playwright page instance
    */
   protected async setupPageEvents(_page: Page): Promise<void> {
     // To be implemented by concrete plugins
@@ -52,7 +53,8 @@ export abstract class PlaywrightPlugin {
 
   /**
    * Setup context-level event listeners
-   * Override in concrete plugins to add custom behavior
+   * ABSTRACT METHOD: Override in concrete plugins to add custom behavior
+   * @param _context - The Playwright browser context instance
    */
   protected async setupContextEvents(_context: BrowserContext): Promise<void> {
     // To be implemented by concrete plugins
@@ -60,7 +62,8 @@ export abstract class PlaywrightPlugin {
 
   /**
    * Setup browser-level event listeners
-   * Override in concrete plugins to add custom behavior
+   * ABSTRACT METHOD: Override in concrete plugins to add custom behavior
+   * @param _browser - The Playwright browser instance
    */
   protected async setupBrowserEvents(_browser: Browser): Promise<void> {
     // To be implemented by concrete plugins

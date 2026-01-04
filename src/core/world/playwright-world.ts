@@ -36,6 +36,8 @@ export class PlaywrightWorld extends World implements IPlaywrightWorld {
     super(options);
 
     this.config = new GlobalProperties();
+    const scenarioName = this.extractScenarioName(options);
+
     this.logger = new Logger(
       {
         level: this.config.get('logging.level', 'info') as 'debug' | 'info' | 'warn' | 'error',
@@ -43,18 +45,24 @@ export class PlaywrightWorld extends World implements IPlaywrightWorld {
         console: true,
         outputDir: this.config.get('logging.outputDir', 'logs') as string,
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-      { scenario: (options as any).pickle?.name || 'unknown' }
+      { scenario: scenarioName }
     );
 
     this.playwright = new PlaywrightAdapter(this.config, this.logger);
 
-    // Get scenario name from Cucumber options (type not properly exposed in IWorldOptions)
+    this.logger.info('PlaywrightWorld initialized', {
+      scenario: scenarioName,
+    });
+  }
+
+  /**
+   * Extract scenario name from Cucumber options
+   * Handles type mismatch in IWorldOptions interface
+   */
+  private extractScenarioName(options: IWorldOptions): string {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
     const scenarioName: unknown = (options as any).pickle?.name;
-    this.logger.info('PlaywrightWorld initialized', {
-      scenario: typeof scenarioName === 'string' ? scenarioName : 'unknown',
-    });
+    return typeof scenarioName === 'string' ? scenarioName : 'unknown';
   }
 
   /**
@@ -134,6 +142,7 @@ export class PlaywrightWorld extends World implements IPlaywrightWorld {
 
     // Attach to Cucumber report
     if (this.attach) {
+      // Note: Cucumber's attach may or may not return a Promise depending on version
       // eslint-disable-next-line @typescript-eslint/await-thenable
       await this.attach(screenshot, 'image/png');
     }
