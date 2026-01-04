@@ -338,7 +338,7 @@ The framework maintains high test coverage:
 
 ## 📊 Reporting
 
-The framework provides multiple reporting formats to suit different needs, from simple HTML reports to comprehensive Allure reports with rich visualizations.
+The framework provides multiple reporting formats to suit different needs, from simple HTML reports to comprehensive Allure reports with rich visualizations, plus Playwright's native HTML reporter.
 
 ### Available Report Types
 
@@ -356,6 +356,7 @@ Rich, interactive HTML report with detailed metrics, charts, and metadata using 
 - Browser and platform information
 - Custom metadata and branding
 - Interactive charts and graphs
+- **Step-by-step screenshots** attached to each step
 
 **Location:** `results/enhanced-html-report/index.html`
 
@@ -366,11 +367,12 @@ Enterprise-grade reporting with comprehensive test analytics, history trends, an
 
 **Features:**
 - Test execution trends and history
-- Test duration and retry information
+- Test duration in milliseconds (properly formatted)
 - Categories and severity levels
-- Detailed test steps with screenshots
+- Detailed test steps with **screenshots attached to every step**
 - Attachments (screenshots, logs, traces)
 - Comprehensive test analytics
+- Data tables for parameterized tests
 
 **Location:** `allure-report/index.html`
 
@@ -386,18 +388,51 @@ npm run report:allure:open
 npm run report:allure:serve
 ```
 
-#### 4. JSON Report
+#### 4. Playwright HTML Report (Native)
+Playwright's built-in HTML reporter for standalone Playwright Test tests (not Cucumber tests).
+
+**Features:**
+- Interactive test timeline
+- Screenshots and videos attached to tests
+- Step-by-step traces
+- Detailed test execution metrics
+- Filter and search capabilities
+
+**Location:** `playwright-report/index.html`
+
+**Commands:**
+```bash
+# Run Playwright native tests and generate report
+npm run playwright:test
+
+# Open Playwright HTML report
+npm run playwright:report
+```
+
+#### 5. JSON Report
 Machine-readable JSON format for custom processing and integration with other tools.
 
-**Location:** `results/cucumber-report.json`
+**Location:** `results/cucumber-report.json` and `results/playwright-report.json`
+
+### Screenshot Capability
+
+The framework automatically captures **screenshots after every step** in Cucumber tests:
+
+- **Cucumber AfterStep Hook**: Captures full-page screenshots after each step execution
+- **Allure Integration**: Screenshots are automatically attached to each step in Allure reports
+- **Enhanced HTML Report**: Screenshots appear in the enhanced HTML report
+- **Failure Screenshots**: Additional screenshots captured on test failures
+
+**Configuration**: Screenshots are enabled by default through the `AfterStep` hook in `src/features/support/hooks.ts`
 
 ### Test Artifacts
 
 The framework automatically captures various artifacts during test execution:
 
-- **Screenshots**: Automatically captured on test failures
-  - Location: `results/screenshots/`
-  - Attached to Cucumber and Allure reports
+- **Screenshots**: Automatically captured after every step and on test failures
+  - Location: Embedded in reports and `results/screenshots/`
+  - Attached to Cucumber, Enhanced HTML, and Allure reports
+  - Full-page screenshots by default
 
 - **Traces**: Playwright traces for detailed debugging (when enabled)
   - Location: `results/traces/`
@@ -410,6 +445,38 @@ The framework automatically captures various artifacts during test execution:
 - **Logs**: Structured application logs
   - Location: `logs/`
   - Format: JSON or text (configurable)
+
+### Running Different Test Types
+
+#### Cucumber BDD Tests (Primary)
+```bash
+# Run all Cucumber tests
+npm run cucumber
+
+# Run specific feature
+npm run cucumber -- src/features/saucedemo.feature
+
+# Run tests with tags
+npm run cucumber -- --tags "@complex and @purchase"
+
+# Run with report generation
+npm run cucumber:report
+```
+
+#### Playwright Native Tests (Optional)
+```bash
+# Run Playwright Test framework tests
+npm run playwright:test
+
+# Open Playwright HTML report
+npm run playwright:report
+
+# Run Playwright tests directly
+npx playwright test
+
+# Run specific test file
+npx playwright test tests/playwright/example.spec.ts
+```
 
 ### Generating Reports
 
@@ -436,9 +503,10 @@ npm run report:allure:open
 Reports are automatically generated and uploaded as artifacts in CI/CD pipelines:
 
 1. **Standard Cucumber HTML** - Basic test results
-2. **Enhanced HTML Report** - Rich interactive report
-3. **Allure Report** - Comprehensive analytics
-4. **Test Results** - All JSON data and artifacts
+2. **Enhanced HTML Report** - Rich interactive report with screenshots
+3. **Allure Report** - Comprehensive analytics with step screenshots
+4. **Playwright HTML Report** - Native Playwright test results (when applicable)
+5. **Test Results** - All JSON data and artifacts
 
 All reports are retained for 30 days and can be downloaded from the GitHub Actions artifacts section.
 
