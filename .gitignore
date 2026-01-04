@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Test results
+results/
+test-results/
+coverage/
+.nyc_output/
+
+# Playwright
+playwright-report/
+playwright/.cache/
+
+# Cucumber
+reports/
+cucumber-report.html
+cucumber-report.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Screenshots and videos
+screenshots/
+videos/
+traces/
+
+# Allure
+allure-results/
+allure-report/

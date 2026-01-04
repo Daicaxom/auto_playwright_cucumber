@@ -1,0 +1,26 @@
+{
+  "execution": {
+    "headless": true,
+    "workers": 4,
+    "retries": 3,
+    "trace": true
+  },
+  "browser": {
+    "headless": true
+  },
+  "reporting": {
+    "screenshots": {
+      "onFailure": true
+    },
+    "video": {
+      "enabled": true,
+      "mode": "retain-on-failure"
+    },
+    "trace": {
+      "enabled": true
+    }
+  },
+  "logging": {
+    "level": "info"
+  }
+}

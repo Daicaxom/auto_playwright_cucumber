@@ -1,0 +1,72 @@
+{
+  "execution": {
+    "timeout": 30000,
+    "navigationTimeout": 60000,
+    "headless": true,
+    "workers": 4,
+    "retries": 2,
+    "trace": true
+  },
+  "browser": {
+    "name": "chromium",
+    "headless": true,
+    "args": [],
+    "ignoreHTTPSErrors": true,
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "launchOptions": {}
+  },
+  "ui": {
+    "timeout": 30000,
+    "navigationTimeout": 60000
+  },
+  "reporting": {
+    "screenshots": {
+      "enabled": true,
+      "fullPage": true,
+      "onFailure": true
+    },
+    "video": {
+      "enabled": false,
+      "mode": "retain-on-failure"
+    },
+    "trace": {
+      "enabled": true,
+      "screenshots": true,
+      "snapshots": true,
+      "sources": true
+    },
+    "allure": {
+      "enabled": true,
+      "outputDir": "results/allure-results"
+    }
+  },
+  "monitoring": {
+    "network": {
+      "enabled": true
+    },
+    "console": {
+      "enabled": true
+    },
+    "performance": {
+      "enabled": true
+    }
+  },
+  "testData": {
+    "locale": "en",
+    "faker": {
+      "seed": null
+    }
+  },
+  "visual": {
+    "threshold": 0.1,
+    "baselineDir": "tests/visual/baseline"
+  },
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "outputDir": "logs"
+  }
+}
