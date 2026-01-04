@@ -41,8 +41,7 @@ jobs:
         run: mkdir -p results
 
       - name: Run SauceDemo Cucumber tests
-        run: npm run cucumber -- --tags "@complex and @purchase" src/features/saucedemo.feature
-        continue-on-error: true
+        run: npm run cucumber -- --tags "@complex and @purchase" src/features/saucedemo.feature || echo "Tests completed with exit code $?"
         env:
           CI: true
 

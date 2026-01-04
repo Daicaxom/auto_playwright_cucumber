@@ -7,15 +7,6 @@ import { PlaywrightWorld } from '../../core/world/playwright-world';
 Before(async function (this: PlaywrightWorld) {
   // Initialize browser, context, and page
   await this.init();
-
-  // Start tracing if enabled
-  if (this.context && this.config.get('execution.trace', false)) {
-    await this.context.tracing.start({
-      screenshots: true,
-      snapshots: true,
-      sources: true,
-    });
-  }
 });
 
 /**
