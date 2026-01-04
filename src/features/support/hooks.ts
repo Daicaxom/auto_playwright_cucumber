@@ -59,6 +59,7 @@ BeforeAll(async function () {
     try {
       await mkdir(dirPath, { recursive: true });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(`Failed to create directory ${dir}:`, error);
     }
   }
@@ -67,7 +68,8 @@ BeforeAll(async function () {
 /**
  * Global teardown - runs once after all scenarios
  */
-AfterAll(async function () {
+AfterAll(function () {
   // Placeholder for global cleanup if needed
+  // eslint-disable-next-line no-console
   console.log('All scenarios completed');
 });
