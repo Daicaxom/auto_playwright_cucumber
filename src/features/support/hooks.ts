@@ -1,4 +1,4 @@
-import { Before, After, BeforeAll, AfterAll, Status } from '@cucumber/cucumber';
+import { Before, After, AfterStep, BeforeAll, AfterAll, Status } from '@cucumber/cucumber';
 import { PlaywrightWorld } from '../../core/world/playwright-world';
 import { mkdir } from 'fs/promises';
 import { resolve } from 'path';
@@ -53,6 +53,24 @@ After(async function (this: PlaywrightWorld, { result, pickle }) {
         await this.browser.close().catch(() => {});
       } catch {}
     }
+  }
+});
+
+/**
+ * Capture screenshot after each step to embed into Cucumber JSON for reports
+ */
+AfterStep(async function (this: PlaywrightWorld, { pickle, result }) {
+  if (!this.page || !this.attach) return;
+
+  try {
+    const safeName = pickle.name.replace(/[^a-zA-Z0-9]/g, '_');
+    const screenshot = await this.page.screenshot({ fullPage: true });
+    // Attach to Cucumber report (multiple-cucumber-html-reporter reads embeddings)
+    // eslint-disable-next-line @typescript-eslint/await-thenable
+    await this.attach(screenshot, 'image/png');
+    this.logger.debug('Step screenshot attached', { scenario: safeName, status: result?.status });
+  } catch (error) {
+    this.logger.warn('Failed to capture step screenshot', error as Error);
   }
 });
 
