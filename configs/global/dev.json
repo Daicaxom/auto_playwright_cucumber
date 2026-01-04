@@ -1,0 +1,22 @@
+{
+  "execution": {
+    "headless": false,
+    "workers": 1,
+    "trace": true
+  },
+  "browser": {
+    "headless": false,
+    "launchOptions": {
+      "slowMo": 100
+    }
+  },
+  "reporting": {
+    "video": {
+      "enabled": true,
+      "mode": "on"
+    }
+  },
+  "logging": {
+    "level": "debug"
+  }
+}
