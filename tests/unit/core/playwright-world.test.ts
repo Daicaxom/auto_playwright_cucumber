@@ -57,7 +57,7 @@ describe('PlaywrightWorld', () => {
     it('should share data between steps', () => {
       world.sharedData['userId'] = '12345';
       world.sharedData['userName'] = 'John Doe';
-      
+
       expect(world.sharedData['userId']).toBe('12345');
       expect(world.sharedData['userName']).toBe('John Doe');
     });
@@ -67,7 +67,7 @@ describe('PlaywrightWorld', () => {
         user: { id: 1, name: 'Test' },
         items: [1, 2, 3],
       };
-      
+
       world.sharedData['complex'] = complexData;
       expect(world.sharedData['complex']).toEqual(complexData);
     });

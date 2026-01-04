@@ -20,7 +20,10 @@ export class PlaywrightAdapter {
     const browserType = this.config.get('browser.name', 'chromium') as string;
     const browserArgs = this.config.get('browser.args', []) as string[];
 
-    this.logger.debug('Creating browser', { type: browserType, headless: this.config.get('browser.headless') });
+    this.logger.debug('Creating browser', {
+      type: browserType,
+      headless: this.config.get('browser.headless'),
+    });
 
     const launchOptions = {
       headless: this.config.get('browser.headless', true) as boolean,
@@ -53,7 +56,10 @@ export class PlaywrightAdapter {
    * Create a browser context with enhanced options from configuration
    * Contexts provide isolation and allow custom settings per test
    */
-  async createContext(browser: Browser, options?: Record<string, unknown>): Promise<BrowserContext> {
+  async createContext(
+    browser: Browser,
+    options?: Record<string, unknown>
+  ): Promise<BrowserContext> {
     this.logger.debug('Creating browser context');
 
     const viewport = this.config.get('browser.viewport', { width: 1920, height: 1080 }) as {

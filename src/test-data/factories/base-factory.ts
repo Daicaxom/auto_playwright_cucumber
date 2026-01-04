@@ -106,7 +106,8 @@ export class FactoryRegistry {
    * Cleanup all registered factories
    * Clears the registry to free resources
    */
-  async cleanup(): Promise<void> {
+  cleanup(): Promise<void> {
     this.factories.clear();
+    return Promise.resolve();
   }
 }

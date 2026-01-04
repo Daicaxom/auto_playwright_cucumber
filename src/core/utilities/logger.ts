@@ -118,17 +118,22 @@ export class Logger {
   private logToConsole(entry: LogEntry): void {
     const formattedMessage = this.formatMessage(entry);
 
+    // eslint-disable-next-line no-console
     switch (entry.level) {
       case 'debug':
+        // eslint-disable-next-line no-console
         console.debug(formattedMessage);
         break;
       case 'info':
+        // eslint-disable-next-line no-console
         console.info(formattedMessage);
         break;
       case 'warn':
+        // eslint-disable-next-line no-console
         console.warn(formattedMessage);
         break;
       case 'error':
+        // eslint-disable-next-line no-console
         console.error(formattedMessage);
         break;
     }
@@ -143,10 +148,7 @@ export class Logger {
     }
 
     // Text format
-    const parts: string[] = [
-      `[${entry.timestamp}]`,
-      `[${entry.level.toUpperCase()}]`,
-    ];
+    const parts: string[] = [`[${entry.timestamp}]`, `[${entry.level.toUpperCase()}]`];
 
     if (Object.keys(entry.context || {}).length > 0) {
       parts.push(`[${JSON.stringify(entry.context)}]`);

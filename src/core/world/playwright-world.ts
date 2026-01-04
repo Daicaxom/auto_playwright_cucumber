@@ -43,13 +43,17 @@ export class PlaywrightWorld extends World implements IPlaywrightWorld {
         console: true,
         outputDir: this.config.get('logging.outputDir', 'logs') as string,
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
       { scenario: (options as any).pickle?.name || 'unknown' }
     );
 
     this.playwright = new PlaywrightAdapter(this.config, this.logger);
 
+    // Get scenario name from Cucumber options (type not properly exposed in IWorldOptions)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+    const scenarioName: unknown = (options as any).pickle?.name;
     this.logger.info('PlaywrightWorld initialized', {
-      scenario: (options as any).pickle?.name,
+      scenario: typeof scenarioName === 'string' ? scenarioName : 'unknown',
     });
   }
 
@@ -130,6 +134,7 @@ export class PlaywrightWorld extends World implements IPlaywrightWorld {
 
     // Attach to Cucumber report
     if (this.attach) {
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await this.attach(screenshot, 'image/png');
     }
 
@@ -166,7 +171,7 @@ export class PlaywrightWorld extends World implements IPlaywrightWorld {
    */
   async wait(milliseconds: number): Promise<void> {
     this.logger.debug('Waiting', { milliseconds });
-    await new Promise((resolve) => setTimeout(resolve, milliseconds));
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
   }
 }
 

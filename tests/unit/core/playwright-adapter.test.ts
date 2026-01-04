@@ -49,7 +49,7 @@ describe('PlaywrightAdapter', () => {
     it('should create browser with custom options from config', async () => {
       config.set('browser.name', 'chromium');
       config.set('browser.headless', true);
-      
+
       browser = await adapter.createBrowser();
       expect(browser).toBeDefined();
       expect(browser.isConnected()).toBe(true);
@@ -85,7 +85,7 @@ describe('PlaywrightAdapter', () => {
 
     it('should create context with viewport from config', async () => {
       config.set('browser.viewport', { width: 1280, height: 720 });
-      
+
       context = await adapter.createContext(browser);
       expect(context).toBeDefined();
     }, 30000);
@@ -95,14 +95,14 @@ describe('PlaywrightAdapter', () => {
         viewport: { width: 800, height: 600 },
         userAgent: 'Custom User Agent',
       };
-      
+
       context = await adapter.createContext(browser, options);
       expect(context).toBeDefined();
     }, 30000);
 
     it('should enable tracing when configured', async () => {
       config.set('execution.trace', true);
-      
+
       context = await adapter.createContext(browser);
       expect(context).toBeDefined();
       // Tracing should be started automatically
@@ -138,7 +138,7 @@ describe('PlaywrightAdapter', () => {
 
     it('should set default timeout from config', async () => {
       config.set('ui.timeout', 45000);
-      
+
       page = await adapter.createPage(context);
       expect(page).toBeDefined();
       // Page should have timeout set
@@ -146,7 +146,7 @@ describe('PlaywrightAdapter', () => {
 
     it('should set navigation timeout from config', async () => {
       config.set('ui.navigationTimeout', 90000);
-      
+
       page = await adapter.createPage(context);
       expect(page).toBeDefined();
     }, 30000);
@@ -160,7 +160,7 @@ describe('PlaywrightAdapter', () => {
     beforeEach(async () => {
       config.set('monitoring.network.enabled', true);
       config.set('monitoring.console.enabled', true);
-      
+
       browser = await adapter.createBrowser();
       context = await adapter.createContext(browser);
     });
@@ -185,7 +185,7 @@ describe('PlaywrightAdapter', () => {
 
     it('should not interfere with page functionality', async () => {
       page = await adapter.createPage(context);
-      
+
       // Should be able to navigate
       await page.goto('about:blank');
       expect(page.url()).toBe('about:blank');
@@ -195,13 +195,13 @@ describe('PlaywrightAdapter', () => {
   describe('Error Handling', () => {
     it('should handle browser launch failure gracefully', async () => {
       config.set('browser.launchOptions', { executablePath: '/invalid/path' });
-      
+
       await expect(adapter.createBrowser()).rejects.toThrow();
     });
 
     it('should handle invalid configuration gracefully', async () => {
       config.set('browser.name', 'invalid-browser');
-      
+
       await expect(adapter.createBrowser()).rejects.toThrow();
     });
   });

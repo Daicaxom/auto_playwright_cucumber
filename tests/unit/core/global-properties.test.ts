@@ -98,9 +98,9 @@ describe('GlobalProperties', () => {
     it('should prioritize CLI args over env vars', () => {
       process.env.BROWSER_NAME = 'firefox';
       process.argv.push('--browser.name=chromium');
-      
+
       globalProperties = new GlobalProperties();
-      
+
       // CLI args should take precedence
       expect(globalProperties).toBeInstanceOf(GlobalProperties);
     });
@@ -108,7 +108,7 @@ describe('GlobalProperties', () => {
     it('should prioritize env vars over config files', () => {
       process.env.EXECUTION_TIMEOUT = '45000';
       globalProperties = new GlobalProperties();
-      
+
       // Env var should take precedence
       expect(globalProperties).toBeInstanceOf(GlobalProperties);
     });
@@ -118,7 +118,7 @@ describe('GlobalProperties', () => {
     it('should detect CI environment', () => {
       process.env.CI = 'true';
       globalProperties = new GlobalProperties();
-      
+
       const isCI = globalProperties.isCI();
       expect(isCI).toBe(true);
     });
@@ -127,16 +127,16 @@ describe('GlobalProperties', () => {
       // Save current CI env vars
       const savedCI = process.env.CI;
       const savedGithub = process.env.GITHUB_ACTIONS;
-      
+
       // Clear CI environment variables
       delete process.env.CI;
       delete process.env.GITHUB_ACTIONS;
-      
+
       globalProperties = new GlobalProperties();
-      
+
       const isCI = globalProperties.isCI();
       expect(isCI).toBe(false);
-      
+
       // Restore CI env vars
       if (savedCI) process.env.CI = savedCI;
       if (savedGithub) process.env.GITHUB_ACTIONS = savedGithub;
@@ -145,7 +145,7 @@ describe('GlobalProperties', () => {
     it('should detect current environment', () => {
       process.env.NODE_ENV = 'production';
       globalProperties = new GlobalProperties();
-      
+
       const env = globalProperties.getEnvironment();
       expect(env).toBe('production');
     });
@@ -158,7 +158,7 @@ describe('GlobalProperties', () => {
 
     it('should provide Playwright use options', () => {
       const useOptions = globalProperties.getPlaywrightUseOptions();
-      
+
       expect(useOptions).toBeDefined();
       expect(useOptions).toHaveProperty('headless');
       expect(useOptions).toHaveProperty('viewport');
@@ -166,7 +166,7 @@ describe('GlobalProperties', () => {
 
     it('should merge custom use options', () => {
       const useOptions = globalProperties.getPlaywrightUseOptions();
-      
+
       expect(useOptions.viewport).toBeDefined();
       expect(useOptions.viewport).toHaveProperty('width');
       expect(useOptions.viewport).toHaveProperty('height');

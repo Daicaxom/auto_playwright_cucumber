@@ -47,7 +47,7 @@ export class GlobalProperties {
    */
   private loadFile(filename: string): void {
     const filePath = path.join(this.configDir, 'global', filename);
-    
+
     if (!fs.existsSync(filePath)) {
       return; // Skip if file doesn't exist
     }
@@ -68,7 +68,7 @@ export class GlobalProperties {
    */
   private loadEnvironmentVariables(): void {
     const envVars = process.env;
-    
+
     for (const [key, value] of Object.entries(envVars)) {
       if (this.isFrameworkEnvVar(key)) {
         const configKey = this.envVarToConfigKey(key);
@@ -112,7 +112,7 @@ export class GlobalProperties {
    */
   private loadCLIArguments(): void {
     const args = process.argv.slice(2);
-    
+
     for (const arg of args) {
       if (arg.startsWith('--')) {
         const [key, value] = arg.substring(2).split('=');

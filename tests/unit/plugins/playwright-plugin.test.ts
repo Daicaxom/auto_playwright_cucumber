@@ -7,12 +7,14 @@ class TestPlugin extends PlaywrightPlugin {
   public setupCalled = false;
   public cleanupCalled = false;
 
-  async setupPageEvents(_page: Page): Promise<void> {
+  setupPageEvents(_page: Page): Promise<void> {
     this.setupCalled = true;
+    return Promise.resolve();
   }
 
-  async cleanup(): Promise<void> {
+  cleanup(): Promise<void> {
     this.cleanupCalled = true;
+    return Promise.resolve();
   }
 }
 

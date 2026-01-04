@@ -45,7 +45,7 @@ describe('BaseFactory', () => {
   describe('create method', () => {
     it('should create a single object', () => {
       const user = factory.create();
-      
+
       expect(user).toBeDefined();
       expect(user).toHaveProperty('id');
       expect(user).toHaveProperty('name');
@@ -55,13 +55,13 @@ describe('BaseFactory', () => {
     it('should generate unique IDs', () => {
       const user1 = factory.create();
       const user2 = factory.create();
-      
+
       expect(user1.id).not.toBe(user2.id);
     });
 
     it('should accept overrides', () => {
       const user = factory.create({ name: 'Custom Name' });
-      
+
       expect(user.name).toBe('Custom Name');
       expect(user).toHaveProperty('id');
       expect(user).toHaveProperty('email');
@@ -69,7 +69,7 @@ describe('BaseFactory', () => {
 
     it('should generate realistic data', () => {
       const user = factory.create();
-      
+
       expect(user.name).toBeTruthy();
       expect(user.email).toContain('@');
     });
@@ -78,7 +78,7 @@ describe('BaseFactory', () => {
   describe('createMany method', () => {
     it('should create multiple objects', () => {
       const users = factory.createMany(3);
-      
+
       expect(users).toHaveLength(3);
       expect(users[0]).toHaveProperty('id');
       expect(users[1]).toHaveProperty('id');
@@ -89,13 +89,13 @@ describe('BaseFactory', () => {
       const users = factory.createMany(5);
       const ids = users.map((u) => u.id);
       const uniqueIds = new Set(ids);
-      
+
       expect(uniqueIds.size).toBe(5);
     });
 
     it('should apply overrides to all objects', () => {
       const users = factory.createMany(3, { name: 'Same Name' });
-      
+
       users.forEach((user) => {
         expect(user.name).toBe('Same Name');
       });
@@ -116,7 +116,7 @@ describe('FactoryRegistry', () => {
     it('should register a factory', () => {
       const factory = new UserFactory(config);
       registry.register('user', factory);
-      
+
       const retrieved = registry.get<TestUser>('user');
       expect(retrieved).toBe(factory);
     });
@@ -130,10 +130,10 @@ describe('FactoryRegistry', () => {
     it('should allow multiple factories', () => {
       const userFactory = new UserFactory(config);
       const anotherFactory = new UserFactory(config);
-      
+
       registry.register('user', userFactory);
       registry.register('admin', anotherFactory);
-      
+
       expect(registry.get('user')).toBe(userFactory);
       expect(registry.get('admin')).toBe(anotherFactory);
     });
@@ -143,9 +143,9 @@ describe('FactoryRegistry', () => {
     it('should clear all factories', async () => {
       const factory = new UserFactory(config);
       registry.register('user', factory);
-      
+
       await registry.cleanup();
-      
+
       expect(() => {
         registry.get('user');
       }).toThrow();

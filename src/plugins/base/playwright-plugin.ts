@@ -34,7 +34,7 @@ export abstract class PlaywrightPlugin {
       await this.setupPageEvents(page);
       await this.setupContextEvents(context);
       await this.setupBrowserEvents(browser);
-      
+
       this.logger.info(`Plugin registered successfully: ${this.name}`);
     } catch (error) {
       this.logger.error(`Failed to register plugin: ${this.name}`, error);
@@ -70,11 +70,12 @@ export abstract class PlaywrightPlugin {
    * Cleanup plugin resources
    * Override in concrete plugins to add custom cleanup
    */
-  async cleanup(): Promise<void> {
+  cleanup(): Promise<void> {
     this.logger.info(`Cleaning up plugin: ${this.name}`);
     this.page = null;
     this.context = null;
     this.browser = null;
+    return Promise.resolve();
   }
 
   /**
