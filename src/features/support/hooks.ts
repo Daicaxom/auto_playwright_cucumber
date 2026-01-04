@@ -15,29 +15,44 @@ Before(async function (this: PlaywrightWorld) {
  * Teardown hook - runs after each scenario
  */
 After(async function (this: PlaywrightWorld, { result, pickle }) {
-  try {
-    // Capture screenshot on failure
-    if (result && result.status === Status.FAILED) {
-      const scenarioName = pickle.name.replace(/[^a-zA-Z0-9]/g, '_');
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const screenshotName = `${scenarioName}_${timestamp}`;
+  // Capture screenshot on failure
+  if (result && result.status === Status.FAILED) {
+    const scenarioName = pickle.name.replace(/[^a-zA-Z0-9]/g, '_');
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const screenshotName = `${scenarioName}_${timestamp}`;
 
-      try {
-        await this.captureScreenshot(screenshotName);
-        this.logger.info('Screenshot captured for failed scenario', {
-          scenario: pickle.name,
-          screenshotName,
-        });
-      } catch (error) {
-        this.logger.error('Failed to capture screenshot', error);
-      }
+    try {
+      await this.captureScreenshot(screenshotName);
+      this.logger.info('Screenshot captured for failed scenario', {
+        scenario: pickle.name,
+        screenshotName,
+      });
+    } catch (error) {
+      this.logger.error('Failed to capture screenshot', error);
     }
+  }
 
-    // Cleanup Playwright resources
+  // Always cleanup Playwright resources - even if screenshot fails
+  try {
     await this.cleanup();
   } catch (error) {
-    this.logger.error('Error in After hook', error);
-    throw error;
+    this.logger.error('Error cleaning up in After hook', error);
+    // Force cleanup even if error
+    if (this.page) {
+      try {
+        await this.page.close().catch(() => {});
+      } catch {}
+    }
+    if (this.context) {
+      try {
+        await this.context.close().catch(() => {});
+      } catch {}
+    }
+    if (this.browser) {
+      try {
+        await this.browser.close().catch(() => {});
+      } catch {}
+    }
   }
 });
 

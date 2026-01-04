@@ -5,7 +5,7 @@
     "headless": true,
     "workers": 4,
     "retries": 2,
-    "trace": true
+    "trace": false
   },
   "browser": {
     "name": "chromium",
@@ -33,7 +33,7 @@
       "mode": "retain-on-failure"
     },
     "trace": {
-      "enabled": true,
+      "enabled": false,
       "screenshots": true,
       "snapshots": true,
       "sources": true
@@ -45,10 +45,10 @@
   },
   "monitoring": {
     "network": {
-      "enabled": true
+      "enabled": false
     },
     "console": {
-      "enabled": true
+      "enabled": false
     },
     "performance": {
       "enabled": true

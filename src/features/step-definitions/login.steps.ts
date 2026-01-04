@@ -1,27 +1,6 @@
-import { Given, When, Then, Before, After, Status } from '@cucumber/cucumber';
+import { Given, When, Then } from '@cucumber/cucumber';
 import { PlaywrightWorld } from '../../core/world/playwright-world';
 import { expect } from '@playwright/test';
-
-/**
- * Cucumber hooks for test lifecycle management
- */
-
-Before(async function (this: PlaywrightWorld) {
-  // Initialize Playwright resources before each scenario
-  await this.init();
-  this.logger.info('Scenario started');
-});
-
-After(async function (this: PlaywrightWorld, { result }) {
-  // Capture screenshot on failure
-  if (result?.status === Status.FAILED && this.page) {
-    await this.captureScreenshot(`failure-${Date.now()}`);
-  }
-
-  // Cleanup Playwright resources after each scenario
-  await this.cleanup();
-  this.logger.info('Scenario completed', { status: result?.status });
-});
 
 /**
  * Step definitions for login feature

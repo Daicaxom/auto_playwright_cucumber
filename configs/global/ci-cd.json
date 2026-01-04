@@ -3,7 +3,7 @@
     "headless": true,
     "workers": 4,
     "retries": 3,
-    "trace": true
+    "trace": false
   },
   "browser": {
     "headless": true
@@ -13,11 +13,11 @@
       "onFailure": true
     },
     "video": {
-      "enabled": true,
+      "enabled": false,
       "mode": "retain-on-failure"
     },
     "trace": {
-      "enabled": true
+      "enabled": false
     }
   },
   "logging": {
