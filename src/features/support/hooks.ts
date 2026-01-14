@@ -41,17 +41,23 @@ After(async function (this: PlaywrightWorld, { result, pickle }) {
     if (this.page) {
       try {
         await this.page.close().catch(() => {});
-      } catch {}
+      } catch {
+        // Ignore cleanup errors
+      }
     }
     if (this.context) {
       try {
         await this.context.close().catch(() => {});
-      } catch {}
+      } catch {
+        // Ignore cleanup errors
+      }
     }
     if (this.browser) {
       try {
         await this.browser.close().catch(() => {});
-      } catch {}
+      } catch {
+        // Ignore cleanup errors
+      }
     }
   }
 });

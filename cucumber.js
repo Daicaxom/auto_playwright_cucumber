@@ -1,5 +1,6 @@
 module.exports = {
   default: {
+    paths: ['src/features/**/*.feature'],
     require: ['src/features/support/**/*.ts', 'src/features/step-definitions/**/*.ts'],
     requireModule: ['ts-node/register'],
     format: [
@@ -9,5 +10,6 @@ module.exports = {
       './src/features/support/allure-reporter.js',
     ],
     formatOptions: { snippetInterface: 'async-await' },
+    tags: 'not @skip',
   },
 };

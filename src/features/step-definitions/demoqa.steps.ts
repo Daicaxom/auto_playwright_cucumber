@@ -10,8 +10,8 @@ const DEMOQA_BANNER_TIMEOUT = Number(process.env.DEMOQA_BANNER_TIMEOUT || 2000);
 const TEXTBOX_OUTPUT_SELECTORS = {
   name: '#name',
   email: '#email',
-  currentAddress: '#currentAddress',
-  permanentAddress: '#permanentAddress',
+  currentAddress: '#output #currentAddress',
+  permanentAddress: '#output #permanentAddress',
 };
 
 setDefaultTimeout(DEMOQA_TIMEOUT);
