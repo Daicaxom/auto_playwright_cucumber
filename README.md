@@ -38,18 +38,47 @@ This framework leverages Playwright's native features while extending them with 
 
 ```
 playwright-cucumber-enterprise/
-├── src/
-│   ├── core/
-│   │   ├── adapters/         # Playwright adapters
-│   │   ├── utilities/         # Logger, config management
-│   │   └── world/             # Cucumber World integration
-│   ├── features/              # Cucumber features & steps
-│   ├── plugins/               # Extensible plugin system
-│   └── test-data/             # Test data factories
-├── tests/                     # Comprehensive test suite
-├── configs/                   # Configuration files
-└── results/                   # Test results & artifacts
+├── framework/                          # 🎯 Reusable Core Framework
+│   ├── src/
+│   │   ├── core/                      # Core framework components
+│   │   │   ├── adapters/              # Playwright adapter pattern
+│   │   │   ├── utilities/             # Logger, config management
+│   │   │   └── world/                 # Cucumber World integration
+│   │   ├── plugins/                   # Extensible plugin system
+│   │   ├── factories/                 # Test data factories
+│   │   └── index.ts                   # Main framework exports
+│   ├── package.json                   # Framework npm package
+│   └── README.md                      # Framework documentation
+│
+├── tests/                              # 🧪 Application Tests
+│   ├── src/
+│   │   ├── applications/              # Application-specific code
+│   │   │   ├── saucedemo/            # SauceDemo test suite
+│   │   │   │   ├── pages/            # Page Object Model
+│   │   │   │   └── step-definitions/ # Domain-specific steps
+│   │   │   ├── demoqa/               # DemoQA test suite
+│   │   │   │   ├── pages/            # Page Object Model
+│   │   │   │   └── step-definitions/ # Domain-specific steps
+│   │   │   └── shared/               # Shared page objects
+│   │   │       └── pages/
+│   │   │           └── base.page.ts  # Abstract base page
+│   │   └── features/                  # Cucumber feature files
+│   │       ├── saucedemo/            # SauceDemo scenarios
+│   │       └── demoqa/               # DemoQA scenarios
+│   └── support/                       # Cucumber support files
+│       ├── hooks.ts                   # Lifecycle hooks
+│       └── world.ts                   # World setup
+│
+├── configs/                            # ⚙️ Configuration
+├── results/                            # 📊 Test results & reports
+└── scripts/                            # 🛠️ Build & utility scripts
 ```
+
+**Key Design Patterns:**
+- **Monorepo Separation**: Framework (reusable) vs Tests (application-specific)
+- **Page Object Model**: Industry-standard pattern for UI test maintainability
+- **Adapter Pattern**: Wrapping Playwright without overriding native features
+- **Factory Pattern**: Test data generation with Faker.js
 
 ## 🚀 Quick Start
 
@@ -81,17 +110,20 @@ npm test
 # Run unit tests with coverage
 npm run test:coverage
 
-# Run Cucumber tests
-npm run cucumber
+# Run Cucumber tests (all profiles)
+npm run cucumber               # Default (all features except @skip)
+npm run cucumber:smoke         # Smoke tests only (@smoke tag)
+npm run cucumber:regression    # Regression tests (@regression tag)
+npm run cucumber:negative      # Negative tests (@negative tag)
 
-# Run Cucumber tests with automatic report generation
+# Run Cucumber with auto-report generation
 npm run cucumber:report
 
-# Run specific Cucumber feature
-npm run cucumber -- src/features/saucedemo.feature
+# Run specific feature file
+npm run cucumber -- tests/src/features/saucedemo/shopping.feature
 
 # Run tests with specific tags
-npm run cucumber -- --tags "@complex and @purchase"
+npm run cucumber -- --tags "@smoke and not @skip"
 
 # Build the project
 npm run build

@@ -5,6 +5,7 @@
     "lib": ["ES2022"],
     "outDir": "./dist",
     "rootDir": "./",
+    "baseUrl": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -26,16 +27,21 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "paths": {
+      "@framework/*": ["framework/src/*"],
+      "@tests/*": ["tests/src/*"]
+    }
   },
   "include": [
-    "src/**/*",
     "tests/**/*",
+    "framework/**/*",
     "configs/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "results"
+    "results",
+    "src"
   ]
 }
