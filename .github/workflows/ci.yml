@@ -37,26 +37,58 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Create results directory
-        run: mkdir -p results
+      - name: Create results directories
+        run: |
+          mkdir -p results/traces
+          mkdir -p results/screenshots
+          mkdir -p results/videos
+          mkdir -p allure-results
 
-      - name: Run SauceDemo Cucumber tests
-        run: npm run cucumber -- --tags "@complex and @purchase" src/features/saucedemo.feature || echo "Tests completed with exit code $?"
+      - name: Run unit tests
+        run: npm test
+        env:
+          CI: true
+
+      - name: Run smoke tests
+        run: npm run cucumber:smoke
+        env:
+          CI: true
+
+      - name: Run regression tests
+        run: npm run cucumber:regression
+        env:
+          CI: true
+        continue-on-error: true
+
+      - name: Run negative tests
+        if: always()
+        run: npm run cucumber:negative
         env:
           CI: true
 
       - name: Generate enhanced HTML report
         if: always()
-        run: npm run report:generate
+        run: npm run report:html
 
       - name: Generate Allure report
         if: always()
-        run: npm run report:allure
+        run: npm run report:allure:generate
 
-      - name: Run Playwright native tests (optional)
+      - name: Upload unit test results
+        uses: actions/upload-artifact@v4
         if: always()
-        run: npx playwright test || echo "No Playwright tests found or tests failed"
-        continue-on-error: true
+        with:
+          name: unit-test-results
+          path: coverage/
+          retention-days: 30
+
+      - name: Upload Cucumber JSON report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cucumber-json-report
+          path: results/cucumber-report.json
+          retention-days: 30
 
       - name: Upload Cucumber HTML report
         uses: actions/upload-artifact@v4
@@ -74,6 +106,22 @@ jobs:
           path: results/enhanced-html-report/
           retention-days: 30
 
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screenshots
+          path: results/screenshots/
+          retention-days: 30
+
+      - name: Upload traces
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-traces
+          path: results/traces/
+          retention-days: 30
+
       - name: Upload Allure report
         uses: actions/upload-artifact@v4
         if: always()
@@ -82,18 +130,22 @@ jobs:
           path: allure-report/
           retention-days: 30
 
-      - name: Upload test results
+      - name: Upload Allure results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results
-          path: results/
+          name: allure-results
+          path: allure-results/
           retention-days: 30
 
-      - name: Upload Playwright HTML report
-        uses: actions/upload-artifact@v4
+      - name: Test Summary
         if: always()
-        with:
-          name: playwright-html-report
-          path: playwright-report/
-          retention-days: 30
+        run: |
+          echo "## Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "### Framework Structure" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Monorepo architecture (framework/ + tests/)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Page Object Model with BasePage" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Hierarchical configuration system" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "Check artifacts for detailed reports" >> $GITHUB_STEP_SUMMARY
