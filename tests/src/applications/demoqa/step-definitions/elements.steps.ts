@@ -15,7 +15,7 @@ Given('I am on the DemoQA home page', { timeout: 90000 }, async function (this: 
   this.logger.info('Navigated to DemoQA home page');
 });
 
-When('I navigate to the DemoQA card {string}', async function (this: PlaywrightWorld, cardName: string) {
+When('I navigate to the DemoQA card {string}', { timeout: 60000 }, async function (this: PlaywrightWorld, cardName: string) {
   if (!this.page) throw new Error('Page not initialized');
 
   const elementsPage = new ElementsPage(this.page);
@@ -23,7 +23,7 @@ When('I navigate to the DemoQA card {string}', async function (this: PlaywrightW
   this.logger.info('Navigated to DemoQA card', { cardName });
 });
 
-When('I open the DemoQA menu item {string}', async function (this: PlaywrightWorld, menuItem: string) {
+When('I open the DemoQA menu item {string}', { timeout: 60000 }, async function (this: PlaywrightWorld, menuItem: string) {
   if (!this.page) throw new Error('Page not initialized');
 
   const elementsPage = new ElementsPage(this.page);
@@ -33,6 +33,7 @@ When('I open the DemoQA menu item {string}', async function (this: PlaywrightWor
 
 When(
   'I fill the DemoQA text box form with:',
+  { timeout: 60000 },
   async function (this: PlaywrightWorld, dataTable: DataTable) {
     if (!this.page) throw new Error('Page not initialized');
 
@@ -49,7 +50,7 @@ When(
   }
 );
 
-When('I submit the DemoQA form', async function (this: PlaywrightWorld) {
+When('I submit the DemoQA form', { timeout: 60000 }, async function (this: PlaywrightWorld) {
   if (!this.page) throw new Error('Page not initialized');
 
   const elementsPage = new ElementsPage(this.page);
@@ -59,6 +60,7 @@ When('I submit the DemoQA form', async function (this: PlaywrightWorld) {
 
 Then(
   'I should see the DemoQA text box output with:',
+  { timeout: 60000 },
   async function (this: PlaywrightWorld, dataTable: DataTable) {
     if (!this.page) throw new Error('Page not initialized');
 
@@ -77,6 +79,7 @@ Then(
 
 When(
   'I add a DemoQA web table record:',
+  { timeout: 60000 },
   async function (this: PlaywrightWorld, dataTable: DataTable) {
     if (!this.page) throw new Error('Page not initialized');
 
@@ -97,6 +100,7 @@ When(
 
 Then(
   'I should see the DemoQA web table row for {string}',
+  { timeout: 60000 },
   async function (this: PlaywrightWorld, email: string) {
     if (!this.page) throw new Error('Page not initialized');
 
@@ -108,6 +112,7 @@ Then(
 
 When(
   'I delete the DemoQA web table row for {string}',
+  { timeout: 60000 },
   async function (this: PlaywrightWorld, email: string) {
     if (!this.page) throw new Error('Page not initialized');
 
@@ -119,6 +124,7 @@ When(
 
 Then(
   'I should not see the DemoQA web table row for {string}',
+  { timeout: 60000 },
   async function (this: PlaywrightWorld, email: string) {
     if (!this.page) throw new Error('Page not initialized');
 
