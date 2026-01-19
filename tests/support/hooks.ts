@@ -40,21 +40,21 @@ After(async function (this: PlaywrightWorld, { result, pickle }) {
     // Force cleanup even if error
     if (this.page) {
       try {
-        await this.page.close().catch(() => {});
+        await this.page.close().catch(() => { });
       } catch {
         // Ignore cleanup errors
       }
     }
     if (this.context) {
       try {
-        await this.context.close().catch(() => {});
+        await this.context.close().catch(() => { });
       } catch {
         // Ignore cleanup errors
       }
     }
     if (this.browser) {
       try {
-        await this.browser.close().catch(() => {});
+        await this.browser.close().catch(() => { });
       } catch {
         // Ignore cleanup errors
       }
@@ -68,10 +68,17 @@ After(async function (this: PlaywrightWorld, { result, pickle }) {
 AfterStep(async function (this: PlaywrightWorld, { pickle, result }) {
   if (!this.page || !this.attach) return;
 
+  const screenshotOnFailure = process.env.SCREENSHOT_ON_FAILURE === 'true';
+
+  // If configured to only capture on failure, skip if step passed
+  if (screenshotOnFailure && result?.status !== 'FAILED') {
+    return;
+  }
+
   try {
     const safeName = pickle.name.replace(/[^a-zA-Z0-9]/g, '_');
-    const screenshot = await this.page.screenshot({ 
-      fullPage: true, 
+    const screenshot = await this.page.screenshot({
+      fullPage: true,
       timeout: 10000 // 10s timeout for screenshot capture
     });
     // Attach to Cucumber report (multiple-cucumber-html-reporter reads embeddings)

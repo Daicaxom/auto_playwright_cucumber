@@ -36,7 +36,7 @@ report.generate({
   </div>`,
   displayDuration: true,
   displayReportTime: true,
-  durationInMS: true,
+  durationInMS: false,
 });
 
 console.log('✅ Enhanced HTML report generated successfully at: results/enhanced-html-report');
