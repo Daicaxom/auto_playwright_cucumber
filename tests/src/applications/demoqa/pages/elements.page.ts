@@ -62,7 +62,7 @@ export class ElementsPage extends BasePage {
   async navigateToCard(cardName: string): Promise<void> {
     const card = this.getLocator(this.selectors.card).filter({ hasText: cardName });
     await card.click();
-    await this.waitForNavigation();
+    await this.page.waitForLoadState('domcontentloaded');
   }
 
   /**
@@ -71,7 +71,7 @@ export class ElementsPage extends BasePage {
   async openMenuItem(menuItem: string): Promise<void> {
     const item = this.getLocator(this.selectors.menuItem).filter({ hasText: menuItem });
     await item.click();
-    await this.waitForNavigation();
+    await this.page.waitForLoadState('domcontentloaded');
   }
 
   // ===== Text Box Methods =====
@@ -108,7 +108,7 @@ export class ElementsPage extends BasePage {
     permanentAddress: string;
   }): Promise<void> {
     await expect(this.getLocator(this.selectors.textBox.output)).toBeVisible();
-    
+
     const outputName = await this.getText(this.selectors.textBox.outputName);
     const outputEmail = await this.getText(this.selectors.textBox.outputEmail);
     const outputCurrentAddress = await this.getText(`${this.selectors.textBox.output} p:nth-of-type(3)`);

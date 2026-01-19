@@ -11,7 +11,7 @@ module.exports = {
       'progress',
       'html:results/cucumber-report.html',
       'json:results/cucumber-report.json',
-      './src/features/support/allure-reporter.js',
+      'json:results/cucumber-report.json',
     ],
     formatOptions: { snippetInterface: 'async-await' },
     tags: 'not @skip',
