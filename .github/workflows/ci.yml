@@ -87,7 +87,7 @@ jobs:
         if: always()
         with:
           name: cucumber-json-report
-          path: results/cucumber-report.json
+          path: results/*.json
           retention-days: 30
 
       - name: Upload Cucumber HTML report

@@ -10,8 +10,7 @@ module.exports = {
     format: [
       'progress',
       'html:results/cucumber-report.html',
-      'json:results/cucumber-report.json',
-      'json:results/cucumber-report.json',
+      'json:results/report-default.json',
     ],
     formatOptions: { snippetInterface: 'async-await' },
     tags: 'not @skip',
@@ -27,7 +26,7 @@ module.exports = {
     format: [
       'progress',
       'html:results/cucumber-report.html',
-      'json:results/cucumber-report.json',
+      'json:results/report-smoke.json',
     ],
     formatOptions: { snippetInterface: 'async-await' },
     tags: '@smoke and not @skip',
@@ -43,7 +42,7 @@ module.exports = {
     format: [
       'progress',
       'html:results/cucumber-report.html',
-      'json:results/cucumber-report.json',
+      'json:results/report-regression.json',
     ],
     formatOptions: { snippetInterface: 'async-await' },
     tags: '@regression and not @skip',
@@ -59,7 +58,7 @@ module.exports = {
     format: [
       'progress',
       'html:results/cucumber-report.html',
-      'json:results/cucumber-report.json',
+      'json:results/report-negative.json',
     ],
     formatOptions: { snippetInterface: 'async-await' },
     tags: '@negative and not @skip',
